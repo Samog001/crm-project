@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block section %}
+
+<main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 py-4 mx-auto">
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+            
+            <!-- Trainer Photo & Basic Details -->
+            <div class="flex items-center space-x-6">
+                {% if trainer.photo %}
+                    <img src="{{ trainer.photo.url }}" alt="Trainer Photo" class="w-56 h-56 rounded-lg border-4 border-blue-500">
+                {% else %}
+                    <div class="w-56 h-56 flex items-center justify-center bg-gray-200 rounded-lg border-4 border-gray-400">
+                        <span class="text-gray-500">No Photo</span>
+                    </div>
+                {% endif %}
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-800">{{ trainer.first_name }} {{ trainer.last_name }}</h2>
+                    <p class="text-sm text-gray-500">{{ trainer.email }}</p>
+                    <p class="text-sm text-gray-500">{{ trainer.contact }}</p>
+                </div>
+            </div>
+
+            <!-- Employee ID -->
+            <div class="mt-6">
+                <span class="font-medium text-gray-700">Employee ID:</span>
+                <span class="text-gray-600">{{ trainer.employee_id }}</span>
+            </div>
+
+            <!-- Courses Handled -->
+            <div class="mt-6">
+                <span class="font-medium text-gray-700">Courses Handled:</span>
+                <span class="text-gray-600">
+                    {% if trainer.course %}
+                        {{ trainer.course.name }}
+                    {% else %}
+                        Not Assigned
+                    {% endif %}
+                </span>
+            </div>
+
+            <!-- Qualification & Stream -->
+            <div class="mt-6">
+                <span class="font-medium text-gray-700">Qualification:</span>
+                <span class="text-gray-600">{{ trainer.qualification }}</span>
+            </div>
+            <div class="mt-6">
+                <span class="font-medium text-gray-700">Stream:</span>
+                <span class="text-gray-600">{{ trainer.stream }}</span>
+            </div>
+
+            <!-- Experience -->
+            {% if trainer.experience %}
+            <div class="mt-6">
+                <span class="font-medium text-gray-700">Experience:</span>
+                <span class="text-gray-600">{{ trainer.experience }} years</span>
+            </div>
+            {% endif %}
+
+            <!-- Join Date -->
+            <div class="mt-6">
+                <span class="font-medium text-gray-700">Join Date:</span>
+                <span class="text-gray-600">{{ trainer.created_at|date:"Y-m-d" }}</span>
+            </div>
+
+            <!-- Address -->
+            <div class="mt-6">
+                <span class="font-medium text-gray-700">Address:</span>
+                <span class="text-gray-600">
+                    {{ trainer.house_name }}, {{ trainer.post_office }} P O, {{ trainer.district }} - {{ trainer.pincode }}
+                </span>
+            </div>
+
+            <!-- ID Proof -->
+            <div class="mt-6">
+                <span class="font-medium text-gray-700">ID Proof:</span>
+                {% if trainer.id_card %}
+                    <a href="{{ trainer.id_card.url }}" target="_blank" class="text-blue-600 underline">View ID Proof</a>
+                {% else %}
+                    <span class="text-gray-600">Not Uploaded</span>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</main>
+
+{% endblock %}

@@ -2,13 +2,11 @@ from django.db import models
 
 from crmapp.models import BaseClass,District
 
-# Create your models here.
-
-class Trainers(BaseClass):
+class AcademicAdvisors(BaseClass):
 
 
     profile = models.OneToOneField('authentication.Profile',on_delete=models.CASCADE)
-    
+
     first_name = models.CharField(max_length=25)
 
     last_name = models.CharField(max_length=25)
@@ -33,16 +31,15 @@ class Trainers(BaseClass):
     
     stream = models.CharField(max_length=25)
 
-    id_proof = models.FileField(upload_to='trainers/idproof')
-
-    course = models.ForeignKey('courses.Courses',on_delete=models.CASCADE)
-
-    def __str__(self):
-
-        return f'{self.first_name}-{self.last_name}'
+    id_proof = models.FileField(upload_to='academic_counselor/idproof')
     
-    class Meta:
 
-        verbose_name = 'Trainers'
+def str(self):
 
-        verbose_name_plural ='Trainers'
+        return f'{self.first_name} {self.last_name}'
+    
+class Meta:
+
+        verbose_name = 'Academic Counsellors'
+
+        verbose_name_plural ='Academic Counsellors'

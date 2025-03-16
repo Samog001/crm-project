@@ -1,7 +1,7 @@
 from django.views import View
 from .models import District,CourseChoices,Batch,TrainerName
 from django.shortcuts import render,redirect,get_object_or_404
-from .utility import get_adm_num,get_password
+from .utility import get_adm_num,get_password,send_email
 from .forms import StudentRegisterForm 
 from .models import students
 from django.db.models import Q
@@ -10,6 +10,11 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from authentication.permission import permission_roles
+# from payments.forms import PaymentStructureForm
+from django.utils.decorators import method_decorator
+import threading
+import datetime
+from payments.models import Payment 
 
 
 
@@ -51,12 +56,20 @@ class StudentsView(View):
         
         query = request.GET.get('query')
         
-        student = students.objects.filter(active_status=True)
+        role = request.user.role
+        
+        if role in ['Trainer']:
+        
+          student = students.objects.filter(active_status=True,trainer__profile=request.user)
+          
+        else:
+          
+          student = students.objects.filter(active_status=True)
 
         
         if query:
             
-            student = students.objects.filter(Q(active_status=True)&(Q(first_name__icontains = query)|Q(last_name__icontains=query)|Q(contact_num__icontains=query)|Q(house_name__icontains=query)|Q(post_office__icontains=query)|Q(pincode__icontains=query)|Q(course__name__icontains=query)|Q(batch__name__icontains=query)|Q(trainer__first_name__icontains=query)))
+            student = students.objects.filter(Q(active_status=True)&Q(trainer__profile=request.user)&(Q(first_name__icontains = query)|Q(last_name__icontains=query)|Q(contact_num__icontains=query)|Q(house_name__icontains=query)|Q(post_office__icontains=query)|Q(pincode__icontains=query)|Q(course__name__icontains=query)|Q(batch__name__icontains=query)|Q(trainer__first_name__icontains=query)))
             
         
         return render(request,'crmapp/students.html',context={'students':student,'query':query})
@@ -84,20 +97,21 @@ class RegistrationView(View):
     def get(self,request,*args,**kwargs):
         
         form = StudentRegisterForm()
-        
-        
+
         # data ={'number=[1,2,3,4,5]'}
 
         
         # data = {'districts': District,'courses':CourseChoices,'batches':Batch,'trainers':TrainerName,'form':form}
 
-        data = {'form':form}
+        data = {'form':form,}
         
         return render (request,'crmapp/registration.html',context=data) 
     
     def post (self,request,*args,**kwargs):
         
         form = StudentRegisterForm(request.POST,request.FILES)
+        
+        
         
         for error in form.errors:
             
@@ -124,6 +138,34 @@ class RegistrationView(View):
              student.profile = profile
             
              student.save()
+             
+             fee = student.course.offer_fee if student.course.offer_fee else student.course.fee
+             
+             Payment.objects.create(student=student,amount=fee)
+             
+          # sending login credentials to student through mail
+
+            subject = 'Login Credentials'
+
+                # sender = settings.EMAIL_HOST_USER
+
+            recepients = [student.email]
+
+            template = 'email/login-credentials.html'
+
+            Join_date = student.Join_date
+
+            date_after_10_days = Join_date + datetime.timedelta(days=10)
+
+            print(date_after_10_days)
+
+            context = {'name' : f'{student.first_name} {student.last_name}','username' : username,'password' : password,'date_after_10_days' : date_after_10_days}
+
+                # sent_email(subject,recepients,template,context)
+
+            thread = threading.Thread(target=send_email,args=(subject,recepients,template,context))
+
+            thread.start()    
             
             return redirect('students')
         
@@ -176,16 +218,14 @@ class StudentDetailView(View):
         
         # student = get_object_or_404(students,pk=pk)
         
-        student = GetStudentObject().get_student(uuid,request)
+        student = GetStudentObject().get_student(request,uuid)
         
-        return render(request,'crmapp/student-detail.html',context={'student':student})
+        data = {'student':student}
+        
+        return render(request,'crmapp/student-detail.html',context=data)
     
 
-# class Error404View(View):
-    
-#     def get(self,request,*args,**kwargs):
-        
-#         return render(request,'crmapp/error404.html')
+
     
 @method_decorator(permission_roles(roles=['Admin','Sales']),name='dispatch')
 class StudentDeleteView(View):
@@ -202,7 +242,7 @@ class StudentDeleteView(View):
             
         #     return redirect('student-delete')
         
-        student = GetStudentObject().get_student(uuid,request)
+        student = GetStudentObject().get_student(request,uuid)
         
         # student.delete()
         student.active_status = False
@@ -218,7 +258,7 @@ class StudentUpdateView(View):
         
         uuid = kwargs.get('uuid')
         
-        student = GetStudentObject().get_student(uuid,request)
+        student = GetStudentObject().get_student(request,uuid)
         
         form = StudentRegisterForm(instance=student)
         
@@ -230,7 +270,7 @@ class StudentUpdateView(View):
         
         uuid = kwargs.get('uuid')
         
-        student = GetStudentObject().get_student(uuid,request)
+        student = GetStudentObject().get_student(request, uuid)
         
         form = StudentRegisterForm(request.POST,request.FILES,instance=student)
         

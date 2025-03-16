@@ -41,7 +41,10 @@ INSTALLED_APPS = [
     'batches',
     'trainers',
     'authentication',
-    'recordings'
+    'recordings',
+    'academic_counselor',
+    'payments',
+ 
     
     
 ]
@@ -140,4 +143,6 @@ MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'authentication.Profile'
+
+
 

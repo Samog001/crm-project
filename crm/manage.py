@@ -20,3 +20,14 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# >>> from authentication.models import Profile
+# >>> Profile.objects.create_user(username='sales@mailnator.com',password='password',is_staff=True,is_superuser=True,role='Sales')
+# <Profile: sales@mailnator.com - Sales>
+# >>> from authentication.models import Profile
+# >>> Profile.objects.create_user(username='counselor@mailnator.com',password='password',is_staff=True,is_superuser=True,role='Academic Counselor')
+# <Profile: counselor@mailnator.com - Academic Counselor>
+# >>> from authentication.models import Profile
+# >>> Profile.objects.create_user(username='Trainer@mailnator.com',password='password',is_staff=True,is_superuser=True,role='Trainer')
+# <Profile: Trainer@mailnator.com - Trainer>

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block section %}
+ 
+<main class="h-full pb-16 overflow-y-auto">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="container px-6 mx-auto grid">
+            <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+                Update Trainer Details
+            </h2>
+
+            <!-- Personal Details -->
+            <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+                Personal Details
+            </h4>
+            <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">First Name</span><span class="text-red-600">*</span>
+                    {{ form.first_name }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Last Name</span><span class="text-red-600">*</span>
+                    {{ form.last_name }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Photo</span><span class="text-red-600">*</span>
+                    {{ form.photo }}
+                    {% if form.instance.photo %}
+                        <img src="{{ form.instance.photo.url }}" alt="Trainer Photo" class="w-56 h-56 rounded-lg border-4 border-blue-500 mt-2">
+                    {% else %}
+                        <div class="w-56 h-56 flex items-center justify-center bg-gray-200 rounded-lg border-4 border-gray-400 mt-2">
+                            <span class="text-gray-500">No Photo</span>
+                        </div>
+                    {% endif %}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Email</span><span class="text-red-600">*</span>
+                    {{ form.email }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Contact Number</span><span class="text-red-600">*</span>
+                    {{ form.contact }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Employee ID</span><span class="text-red-600">*</span>
+                    {{ form.employee_id }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Qualification</span><span class="text-red-600">*</span>
+                    {{ form.qualification }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Stream</span><span class="text-red-600">*</span>
+                    {{ form.stream }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Experience (in years)</span>
+                    {{ form.experience }}
+                </label>
+            </div>
+
+            <!-- Address Details -->
+            <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300 mt-4">
+                Address Details
+            </h4>
+            <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">House Name</span><span class="text-red-600">*</span>
+                    {{ form.house_name }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Post Office</span><span class="text-red-600">*</span>
+                    {{ form.post_office }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">District</span><span class="text-red-600">*</span>
+                    {{ form.district }}
+                </label>
+
+                <label class="block text-sm mt-4">
+                    <span class="text-gray-700 dark:text-gray-400">Pincode</span><span class="text-red-600">*</span>
+                    {{ form.pincode }}
+                </label>
+            </div>
+
+            <!-- Course Details -->
+            <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300 mt-4">
+                Course Details
+            </h4>
+            <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Course Assigned</span><span class="text-red-600">*</span>
+                    {{ form.course }}
+                </label>
+            </div>
+
+            <!-- ID Proof -->
+            <h4 class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300 mt-4">
+                ID Proof
+            </h4>
+            <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">Upload ID Proof</span>
+                    {{ form.id_card }}
+                </label>
+                {% if form.instance.id_card %}
+                    <a href="{{ form.instance.id_card.url }}" target="_blank" class="text-blue-600 underline mt-2">
+                        View Existing ID Proof
+                    </a>
+                {% else %}
+                    <p class="text-gray-600 mt-2">No ID Proof Uploaded</p>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex items-center justify-end">
+                <button type="submit" class="px-5 py-3 my-6 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                    Update
+                </button>
+            </div>
+        </div>
+    </form>
+</main>
+
+{% endblock %}

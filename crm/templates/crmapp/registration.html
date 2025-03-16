@@ -183,15 +183,7 @@
             <!-- </label> -->
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Trainer Name</span><span class="text-red-600">*</span>
-                <!-- <select
-                name="trainer"
-                required
-                  class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                >{%for trainer in trainers%}
-                  <option>{{trainer.label}}</option>
-                  {%endfor%}
-                  
-                </select> -->
+              
                 {{form.trainer}}
               </label>
               <div class="flex items-center justify-end">
@@ -202,6 +194,25 @@
           </div>
     </div>
 </form>
+<!-- <script>
+  function toggleInstallmentsField() {
+    var installmentsField = document.getElementById('no-of-installments');
+    var paymentSelect = document.getElementById('one-time-or-installments');
+    
+    // Check the current value of the dropdown and toggle the field accordingly
+    if (paymentSelect.value === 'Installments') {
+        installmentsField.style.display = 'block';  
+    } else {
+        installmentsField.style.display = 'none';  
+    }
+  }
+  document.getElementById('one-time-or-installments').addEventListener('change', function () {
+    toggleInstallmentsField(); 
+  });
+
+  window.onload = toggleInstallmentsField;
+</script> -->
+
 </main>
 
 {%endblock%}

@@ -68,7 +68,7 @@ class students(BaseClass):
     
     email = models.EmailField (unique=True)
     
-    contact_num = models.CharField (max_length=50)
+    contact_num = models.CharField (max_length=10)
 
     house_name = models.TextField(max_length=500)
     
